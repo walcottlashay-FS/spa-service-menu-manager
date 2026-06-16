@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, Route, Routes, useNavigate } from "react-router-dom";
 import axios from "axios";
 
-const API_URL = "http://localhost:3000/api/services";
+const API_URL = "https://spa-service-menu-manager-api.onrender.com/api/services";
 
 function HomePage() {
   const [services, setServices] = useState([]);
