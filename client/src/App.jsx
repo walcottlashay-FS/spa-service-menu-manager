@@ -7,12 +7,14 @@ const API_URL = "https://spa-service-menu-manager-api.onrender.com/api/services"
 function HomePage() {
   const [services, setServices] = useState([]);
   const [editId, setEditId] = useState(null);
+
   const [editForm, setEditForm] = useState({
     serviceName: "",
     category: "",
     price: "",
   });
 
+  // Gets the current spa services from the API and displays them on the menu.
   async function getServices() {
     try {
       const response = await axios.get(API_URL);
@@ -22,10 +24,12 @@ function HomePage() {
     }
   }
 
+  // Loads the services when the page first opens.
   useEffect(() => {
     getServices();
   }, []);
 
+  // Opens the edit form for the selected service card.
   function startEdit(service) {
     setEditId(service._id);
     setEditForm({
@@ -35,6 +39,7 @@ function HomePage() {
     });
   }
 
+  // Saves updated service details to the API.
   async function updateService(id) {
     try {
       await axios.patch(`${API_URL}/${id}`, {
@@ -50,7 +55,16 @@ function HomePage() {
     }
   }
 
+  // Removes a service from the menu and refreshes the service list.
   async function deleteService(id) {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to remove this service from the menu?"
+    );
+
+    if (!confirmDelete) {
+      return;
+    }
+
     try {
       await axios.delete(`${API_URL}/${id}`);
       getServices();
@@ -62,18 +76,19 @@ function HomePage() {
   return (
     <section className="page-section">
       <div className="hero">
-        <p className="eyebrow">Spa Service Menu</p>
-        <h1>Curate and manage your spa services with ease.</h1>
+        <p className="eyebrow">Spa Menu Studio</p>
+        <h1>A polished service menu manager for modern spas.</h1>
         <p>
-          This menu manager keeps your facial, body, and wellness services
-          organized in one simple place. Add new treatments, update pricing, and
-          remove outdated services as your spa menu grows.
+          Keep your spa menu organized, updated, and easy to manage from one
+          clean dashboard. Add new treatments, adjust pricing, update
+          categories, and remove outdated services as your business grows.
         </p>
 
         <div className="hero-actions">
           <Link className="primary-link" to="/add-service">
             Add a Service
           </Link>
+
           <a className="soft-link" href="#service-list">
             View Menu
           </a>
@@ -82,9 +97,10 @@ function HomePage() {
 
       <div className="section-heading" id="service-list">
         <p className="eyebrow">Current Menu</p>
-        <h2>Service Collection</h2>
+        <h2>Your Service Collection</h2>
         <p>
-          Each card is connected to the API and stored in the MongoDB database.
+          Review the treatments currently listed on your spa menu and make quick
+          updates when pricing, categories, or offerings change.
         </p>
       </div>
 
@@ -93,9 +109,10 @@ function HomePage() {
           <div className="empty-card">
             <h3>No services added yet</h3>
             <p>
-              Start by adding your first spa service, such as a facial, massage,
-              peel, or body treatment.
+              Start building your menu by adding your first facial, massage,
+              peel, body treatment, or wellness service.
             </p>
+
             <Link className="primary-link" to="/add-service">
               Create First Service
             </Link>
@@ -143,6 +160,7 @@ function HomePage() {
                     <button onClick={() => updateService(service._id)}>
                       Save Update
                     </button>
+
                     <button
                       className="secondary"
                       onClick={() => setEditId(null)}
@@ -156,14 +174,17 @@ function HomePage() {
                   <p className="card-category">{service.category}</p>
                   <h3>{service.serviceName}</h3>
                   <p className="price">${service.price}</p>
+
                   <p className="date">
-                    Added {new Date(service.created_at).toLocaleDateString()}
+                    Added{" "}
+                    {new Date(service.created_at).toLocaleDateString()}
                   </p>
 
                   <div className="button-row">
                     <button onClick={() => startEdit(service)}>
                       Edit Service
                     </button>
+
                     <button
                       className="danger"
                       onClick={() => deleteService(service._id)}
@@ -190,6 +211,7 @@ function AddServicePage() {
     price: "",
   });
 
+  // Sends a new spa service to the API and returns the manager to the menu.
   async function handleSubmit(event) {
     event.preventDefault();
 
@@ -216,10 +238,11 @@ function AddServicePage() {
     <section className="page-section">
       <div className="form-card">
         <p className="eyebrow">New Menu Item</p>
-        <h1>Add a spa service</h1>
+        <h1>Add a service to your spa menu.</h1>
         <p>
-          Create a new menu item for your spa. This form sends the service
-          details to the Express API and saves them in the database.
+          Create a clear, organized listing for a treatment your team offers.
+          Add the service name, choose a category, and set the price so your
+          menu stays easy to manage.
         </p>
 
         <form onSubmit={handleSubmit}>
@@ -273,6 +296,7 @@ function AddServicePage() {
 
           <div className="button-row">
             <button type="submit">Save Service</button>
+
             <Link className="soft-link" to="/">
               Back to Menu
             </Link>
@@ -288,16 +312,24 @@ function AboutPage() {
     <section className="page-section">
       <div className="form-card">
         <p className="eyebrow">About the App</p>
-        <h1>Built for a simple spa menu workflow.</h1>
+        <h1>Designed to help spa managers keep their menu moving.</h1>
+
         <p>
-          Spa Menu Studio is a MERN application created to manage a small list
-          of spa services. The React front end connects to a RESTful Express API,
-          while MongoDB stores each service with a name, category, price, and
-          created date.
+          Spa Menu Studio gives spa managers, estheticians, and wellness
+          business owners a simple way to manage service offerings without
+          digging through scattered notes, old price lists, or separate files.
         </p>
+
         <p>
-          This project demonstrates basic CRUD functionality: creating,
-          reading, updating, and deleting service records.
+          The app is built around the everyday needs of a growing spa: adding
+          new treatments, updating prices, organizing services by category, and
+          removing anything that is no longer offered.
+        </p>
+
+        <p>
+          Whether the menu includes facials, peels, massage, body treatments, or
+          specialty wellness services, Spa Menu Studio keeps everything clean,
+          current, and easy to review.
         </p>
       </div>
     </section>
