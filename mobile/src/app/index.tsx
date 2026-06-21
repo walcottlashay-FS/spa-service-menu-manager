@@ -1,98 +1,139 @@
-import * as Device from 'expo-device';
-import { Platform, StyleSheet } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
-import { AnimatedIcon } from '@/components/animated-icon';
-import { HintRow } from '@/components/hint-row';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { WebBadge } from '@/components/web-badge';
-import { BottomTabInset, MaxContentWidth, Spacing } from '@/constants/theme';
-
-function getDevMenuHint() {
-  if (Platform.OS === 'web') {
-    return <ThemedText type="small">use browser devtools</ThemedText>;
-  }
-  if (Device.isDevice) {
-    return (
-      <ThemedText type="small">
-        shake device or press <ThemedText type="code">m</ThemedText> in terminal
-      </ThemedText>
-    );
-  }
-  const shortcut = Platform.OS === 'android' ? 'cmd+m (or ctrl+m)' : 'cmd+d';
-  return (
-    <ThemedText type="small">
-      press <ThemedText type="code">{shortcut}</ThemedText>
-    </ThemedText>
-  );
-}
+import AppButton from "../components/AppButton";
 
 export default function HomeScreen() {
   return (
-    <ThemedView style={styles.container}>
-      <SafeAreaView style={styles.safeArea}>
-        <ThemedView style={styles.heroSection}>
-          <AnimatedIcon />
-          <ThemedText type="title" style={styles.title}>
-            Welcome to&nbsp;Expo
-          </ThemedText>
-        </ThemedView>
+    <SafeAreaView style={styles.safeArea}>
+      <ScrollView style={styles.page} contentContainerStyle={styles.pageContent}>
+        <View style={styles.heroCard}>
+          <Text style={styles.eyebrow}>Spa Menu Studio</Text>
 
-        <ThemedText type="code" style={styles.code}>
-          get started
-        </ThemedText>
+          <Text style={styles.title}>Manage your spa menu from anywhere.</Text>
 
-        <ThemedView type="backgroundElement" style={styles.stepContainer}>
-          <HintRow
-            title="Try editing"
-            hint={<ThemedText type="code">src/app/index.tsx</ThemedText>}
-          />
-          <HintRow title="Dev tools" hint={getDevMenuHint()} />
-          <HintRow
-            title="Fresh start"
-            hint={<ThemedText type="code">npm run reset-project</ThemedText>}
-          />
-        </ThemedView>
+          <Text style={styles.description}>
+            A mobile service menu manager built for spa managers, estheticians,
+            and wellness business owners who need a simple way to keep services,
+            categories, and pricing organized.
+          </Text>
 
-        {Platform.OS === 'web' && <WebBadge />}
-      </SafeAreaView>
-    </ThemedView>
+          <View style={styles.buttonStack}>
+            <AppButton
+              title="View Services"
+              onPress={() => console.log("View Services pressed")}
+            />
+
+            <AppButton
+              title="Add New Service"
+              variant="soft"
+              onPress={() => console.log("Add Service pressed")}
+            />
+          </View>
+        </View>
+
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>What this app manages</Text>
+
+          <View style={styles.featureCard}>
+            <Text style={styles.featureTitle}>Service Names</Text>
+            <Text style={styles.featureText}>
+              Keep facials, peels, massage, body treatments, and wellness
+              services clearly listed.
+            </Text>
+          </View>
+
+          <View style={styles.featureCard}>
+            <Text style={styles.featureTitle}>Categories</Text>
+            <Text style={styles.featureText}>
+              Organize services by treatment type so the menu stays easy for a
+              spa manager to review.
+            </Text>
+          </View>
+
+          <View style={styles.featureCard}>
+            <Text style={styles.featureTitle}>Pricing</Text>
+            <Text style={styles.featureText}>
+              Update service pricing when your spa menu changes or seasonal
+              offers are added.
+            </Text>
+          </View>
+        </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    flexDirection: 'row',
-  },
   safeArea: {
     flex: 1,
-    paddingHorizontal: Spacing.four,
-    alignItems: 'center',
-    gap: Spacing.three,
-    paddingBottom: BottomTabInset + Spacing.three,
-    maxWidth: MaxContentWidth,
+    backgroundColor: "#f7f1e8",
   },
-  heroSection: {
-    alignItems: 'center',
-    justifyContent: 'center',
+  page: {
     flex: 1,
-    paddingHorizontal: Spacing.four,
-    gap: Spacing.four,
+    backgroundColor: "#f7f1e8",
+  },
+  pageContent: {
+    paddingBottom: 40,
+  },
+  heroCard: {
+    margin: 20,
+    padding: 24,
+    borderRadius: 28,
+    backgroundColor: "#fffaf2",
+    borderWidth: 1,
+    borderColor: "#ddd3c3",
+  },
+  eyebrow: {
+    color: "#7c8f63",
+    fontSize: 13,
+    fontWeight: "700",
+    letterSpacing: 3,
+    textTransform: "uppercase",
+    marginBottom: 14,
   },
   title: {
-    textAlign: 'center',
+    color: "#332c27",
+    fontSize: 38,
+    fontWeight: "800",
+    lineHeight: 42,
+    marginBottom: 18,
   },
-  code: {
-    textTransform: 'uppercase',
+  description: {
+    color: "#675c52",
+    fontSize: 17,
+    lineHeight: 28,
   },
-  stepContainer: {
-    gap: Spacing.three,
-    alignSelf: 'stretch',
-    paddingHorizontal: Spacing.three,
-    paddingVertical: Spacing.four,
-    borderRadius: Spacing.four,
+  buttonStack: {
+    gap: 12,
+    marginTop: 24,
+  },
+  section: {
+    paddingHorizontal: 20,
+  },
+  sectionTitle: {
+    color: "#332c27",
+    fontSize: 24,
+    fontWeight: "800",
+    marginBottom: 16,
+  },
+  featureCard: {
+    padding: 20,
+    borderRadius: 24,
+    backgroundColor: "#ffffff",
+    marginBottom: 14,
+    borderWidth: 1,
+    borderColor: "#e5dccc",
+  },
+  featureTitle: {
+    color: "#332c27",
+    fontSize: 19,
+    fontWeight: "800",
+    marginBottom: 8,
+  },
+  featureText: {
+    color: "#675c52",
+    fontSize: 15,
+    lineHeight: 24,
   },
 });
