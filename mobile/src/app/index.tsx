@@ -1,12 +1,18 @@
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useRouter } from "expo-router";
 
 import AppButton from "../components/AppButton";
 
 export default function HomeScreen() {
+  const router = useRouter();
+
   return (
     <SafeAreaView style={styles.safeArea}>
-      <ScrollView style={styles.page} contentContainerStyle={styles.pageContent}>
+      <ScrollView
+        style={styles.page}
+        contentContainerStyle={styles.pageContent}
+      >
         <View style={styles.heroCard}>
           <Text style={styles.eyebrow}>Spa Menu Studio</Text>
 
@@ -21,14 +27,14 @@ export default function HomeScreen() {
           <View style={styles.buttonStack}>
             <AppButton
               title="View Services"
-              onPress={() => console.log("View Services pressed")}
+              onPress={() => router.push("/services" as never)}
             />
 
             <AppButton
-              title="Add New Service"
-              variant="soft"
-              onPress={() => console.log("Add Service pressed")}
-            />
+  title="Add New Service"
+  variant="soft"
+  onPress={() => router.push("/add-service" as never)}
+/>
           </View>
         </View>
 

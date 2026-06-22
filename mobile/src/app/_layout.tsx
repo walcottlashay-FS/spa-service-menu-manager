@@ -1,15 +1,52 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from 'expo-router';
-import { useColorScheme } from 'react-native';
+import { Stack, useRouter } from "expo-router";
+import { Pressable, Text } from "react-native";
 
-import { AnimatedSplashOverlay } from '@/components/animated-icon';
-import AppTabs from '@/components/app-tabs';
+export default function RootLayout() {
+  const router = useRouter();
 
-export default function TabLayout() {
-  const colorScheme = useColorScheme();
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <AnimatedSplashOverlay />
-      <AppTabs />
-    </ThemeProvider>
+    <Stack
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: "#f7f1e8",
+        },
+        headerTintColor: "#332c27",
+        headerTitleStyle: {
+          fontWeight: "800",
+        },
+        contentStyle: {
+          backgroundColor: "#f7f1e8",
+        },
+        headerRight: () => (
+          <Pressable
+            onPress={() => console.log("Menu pressed")}
+            style={{ paddingHorizontal: 12 }}
+          >
+            <Text style={{ fontSize: 26, color: "#332c27" }}>☰</Text>
+          </Pressable>
+        ),
+      }}
+    >
+      <Stack.Screen
+        name="index"
+        options={{
+          title: "Spa Menu Studio",
+        }}
+      />
+
+      <Stack.Screen
+        name="services"
+        options={{
+          title: "Spa Services",
+        }}
+      />
+
+      <Stack.Screen
+  name="add-service"
+  options={{
+    title: "Add Service",
+  }}
+/>
+    </Stack>
   );
 }
