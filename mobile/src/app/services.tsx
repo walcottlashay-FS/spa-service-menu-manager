@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useRouter } from "expo-router";
 import {
   ActivityIndicator,
   Pressable,
@@ -10,6 +11,7 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import AppButton from "../components/AppButton";
 import ServiceCard from "../components/ServiceCard";
 import {
   deleteService,
@@ -19,6 +21,8 @@ import {
 } from "../services/api";
 
 export default function ServicesScreen() {
+  const router = useRouter();
+
   const [services, setServices] = useState<SpaService[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -28,6 +32,7 @@ export default function ServicesScreen() {
   const [editCategory, setEditCategory] = useState("");
   const [editPrice, setEditPrice] = useState("");
 
+  // Loads the current spa service records when the Services screen opens.
   async function loadServices() {
     try {
       setLoading(true);
@@ -44,6 +49,7 @@ export default function ServicesScreen() {
     }
   }
 
+  // Deletes a selected service and refreshes the menu list.
   async function handleDeleteService(id: string) {
     try {
       await deleteService(id);
@@ -54,6 +60,7 @@ export default function ServicesScreen() {
     }
   }
 
+  // Opens the inline edit form with the selected service data.
   function handleStartEdit(service: SpaService) {
     setEditId(service._id);
     setEditServiceName(service.serviceName);
@@ -61,6 +68,7 @@ export default function ServicesScreen() {
     setEditPrice(String(service.price));
   }
 
+  // Clears the edit form and returns the service card to normal view.
   function handleCancelEdit() {
     setEditId("");
     setEditServiceName("");
@@ -68,6 +76,7 @@ export default function ServicesScreen() {
     setEditPrice("");
   }
 
+  // Sends updated service details to the API and refreshes the menu.
   async function handleUpdateService() {
     if (!editServiceName || !editCategory || !editPrice) {
       setError("Please complete all edit fields before saving.");
@@ -105,6 +114,14 @@ export default function ServicesScreen() {
             View, edit, and remove services currently saved to your spa menu.
             This screen loads live service records from the connected API.
           </Text>
+
+          <View style={styles.headerActions}>
+            <AppButton
+              title="Add New Service"
+              variant="soft"
+              onPress={() => router.push("/add-service" as never)}
+            />
+          </View>
         </View>
 
         {loading ? <ActivityIndicator size="large" /> : null}
@@ -160,11 +177,17 @@ export default function ServicesScreen() {
               </View>
 
               <View style={styles.actionRow}>
-                <Pressable style={styles.saveButton} onPress={handleUpdateService}>
+                <Pressable
+                  style={styles.saveButton}
+                  onPress={handleUpdateService}
+                >
                   <Text style={styles.saveButtonText}>Save</Text>
                 </Pressable>
 
-                <Pressable style={styles.cancelButton} onPress={handleCancelEdit}>
+                <Pressable
+                  style={styles.cancelButton}
+                  onPress={handleCancelEdit}
+                >
                   <Text style={styles.cancelButtonText}>Cancel</Text>
                 </Pressable>
               </View>
@@ -217,6 +240,9 @@ const styles = StyleSheet.create({
     color: "#675c52",
     fontSize: 16,
     lineHeight: 25,
+  },
+  headerActions: {
+    marginTop: 16,
   },
   error: {
     color: "#8f3f3f",
@@ -306,3 +332,4 @@ const styles = StyleSheet.create({
     fontWeight: "800",
   },
 });
+

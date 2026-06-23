@@ -6,6 +6,8 @@ type AppButtonProps = {
   variant?: "primary" | "soft";
 };
 
+// Reusable button component used across the mobile app.
+
 export default function AppButton({
   title,
   onPress,

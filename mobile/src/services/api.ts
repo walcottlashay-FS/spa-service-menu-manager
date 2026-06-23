@@ -14,6 +14,7 @@ export type NewSpaService = {
   price: number;
 };
 
+// Gets all spa services from the deployed Express API.
 export async function getServices() {
   const response = await fetch(API_URL);
 
@@ -24,6 +25,7 @@ export async function getServices() {
   return response.json();
 }
 
+// Sends a new spa service to the API and saves it in the database.
 export async function createService(serviceData: NewSpaService) {
   const response = await fetch(API_URL, {
     method: "POST",
@@ -40,6 +42,7 @@ export async function createService(serviceData: NewSpaService) {
   return response.json();
 }
 
+// Removes one spa service from the database using its ID.
 export async function deleteService(id: string) {
   const response = await fetch(`${API_URL}/${id}`, {
     method: "DELETE",
@@ -52,6 +55,7 @@ export async function deleteService(id: string) {
   return response.json();
 }
 
+// Updates an existing spa service using its ID.
 export async function updateService(id: string, serviceData: NewSpaService) {
   const response = await fetch(`${API_URL}/${id}`, {
     method: "PATCH",
@@ -67,3 +71,4 @@ export async function updateService(id: string, serviceData: NewSpaService) {
 
   return response.json();
 }
+

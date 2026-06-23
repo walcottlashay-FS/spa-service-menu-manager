@@ -1,27 +1,25 @@
+
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 
 import AppButton from "../components/AppButton";
 
+// Mobile dashboard landing screen for the spa service manager.
 export default function HomeScreen() {
   const router = useRouter();
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <ScrollView
-        style={styles.page}
-        contentContainerStyle={styles.pageContent}
-      >
-        <View style={styles.heroCard}>
+      <ScrollView style={styles.page} contentContainerStyle={styles.pageContent}>
+        <View style={styles.headerCard}>
           <Text style={styles.eyebrow}>Spa Menu Studio</Text>
 
-          <Text style={styles.title}>Manage your spa menu from anywhere.</Text>
+          <Text style={styles.title}>Manage your spa services with ease.</Text>
 
           <Text style={styles.description}>
-            A mobile service menu manager built for spa managers, estheticians,
-            and wellness business owners who need a simple way to keep services,
-            categories, and pricing organized.
+            A simple mobile dashboard for keeping spa services, categories, and
+            pricing organized as your menu changes.
           </Text>
 
           <View style={styles.buttonStack}>
@@ -31,39 +29,49 @@ export default function HomeScreen() {
             />
 
             <AppButton
-  title="Add New Service"
-  variant="soft"
-  onPress={() => router.push("/add-service" as never)}
-/>
+              title="Add New Service"
+              variant="soft"
+              onPress={() => router.push("/add-service" as never)}
+            />
           </View>
         </View>
 
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>What this app manages</Text>
+        <View style={styles.dashboardSection}>
+          <Text style={styles.sectionTitle}>Manager Tools</Text>
 
-          <View style={styles.featureCard}>
-            <Text style={styles.featureTitle}>Service Names</Text>
-            <Text style={styles.featureText}>
-              Keep facials, peels, massage, body treatments, and wellness
-              services clearly listed.
-            </Text>
-          </View>
+          <View style={styles.toolGrid}>
+            <View style={styles.toolCard}>
+              <Text style={styles.toolNumber}>01</Text>
+              <Text style={styles.toolTitle}>Review Menu</Text>
+              <Text style={styles.toolText}>
+                View current services saved to your spa menu.
+              </Text>
+            </View>
 
-          <View style={styles.featureCard}>
-            <Text style={styles.featureTitle}>Categories</Text>
-            <Text style={styles.featureText}>
-              Organize services by treatment type so the menu stays easy for a
-              spa manager to review.
-            </Text>
-          </View>
+            <View style={styles.toolCard}>
+              <Text style={styles.toolNumber}>02</Text>
+              <Text style={styles.toolTitle}>Update Pricing</Text>
+              <Text style={styles.toolText}>
+                Edit prices when treatments or seasonal offers change.
+              </Text>
+            </View>
 
-          <View style={styles.featureCard}>
-            <Text style={styles.featureTitle}>Pricing</Text>
-            <Text style={styles.featureText}>
-              Update service pricing when your spa menu changes or seasonal
-              offers are added.
-            </Text>
+            <View style={styles.toolCard}>
+              <Text style={styles.toolNumber}>03</Text>
+              <Text style={styles.toolTitle}>Organize Services</Text>
+              <Text style={styles.toolText}>
+                Keep facials, massage, peels, and wellness services categorized.
+              </Text>
+            </View>
           </View>
+        </View>
+
+        <View style={styles.noteCard}>
+          <Text style={styles.noteTitle}>Built for daily spa operations</Text>
+          <Text style={styles.noteText}>
+            Use this app to keep your service list clean, current, and easy to
+            manage from a mobile-friendly workflow.
+          </Text>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -80,66 +88,93 @@ const styles = StyleSheet.create({
     backgroundColor: "#f7f1e8",
   },
   pageContent: {
+    padding: 20,
     paddingBottom: 40,
   },
-  heroCard: {
-    margin: 20,
+  headerCard: {
     padding: 24,
     borderRadius: 28,
     backgroundColor: "#fffaf2",
     borderWidth: 1,
     borderColor: "#ddd3c3",
+    marginBottom: 24,
   },
   eyebrow: {
     color: "#7c8f63",
     fontSize: 13,
-    fontWeight: "700",
+    fontWeight: "800",
     letterSpacing: 3,
     textTransform: "uppercase",
-    marginBottom: 14,
+    marginBottom: 12,
   },
   title: {
     color: "#332c27",
-    fontSize: 38,
+    fontSize: 32,
     fontWeight: "800",
-    lineHeight: 42,
-    marginBottom: 18,
+    lineHeight: 36,
+    marginBottom: 14,
   },
   description: {
     color: "#675c52",
-    fontSize: 17,
-    lineHeight: 28,
+    fontSize: 16,
+    lineHeight: 25,
   },
   buttonStack: {
     gap: 12,
     marginTop: 24,
   },
-  section: {
-    paddingHorizontal: 20,
+  dashboardSection: {
+    marginBottom: 20,
   },
   sectionTitle: {
     color: "#332c27",
-    fontSize: 24,
+    fontSize: 22,
     fontWeight: "800",
-    marginBottom: 16,
-  },
-  featureCard: {
-    padding: 20,
-    borderRadius: 24,
-    backgroundColor: "#ffffff",
     marginBottom: 14,
+  },
+  toolGrid: {
+    gap: 12,
+  },
+  toolCard: {
+    backgroundColor: "#ffffff",
+    borderRadius: 22,
+    padding: 18,
     borderWidth: 1,
     borderColor: "#e5dccc",
   },
-  featureTitle: {
+  toolNumber: {
+    color: "#7c8f63",
+    fontSize: 13,
+    fontWeight: "900",
+    letterSpacing: 2,
+    marginBottom: 8,
+  },
+  toolTitle: {
     color: "#332c27",
-    fontSize: 19,
+    fontSize: 18,
+    fontWeight: "800",
+    marginBottom: 6,
+  },
+  toolText: {
+    color: "#675c52",
+    fontSize: 15,
+    lineHeight: 23,
+  },
+  noteCard: {
+    backgroundColor: "#e8ddcd",
+    borderRadius: 24,
+    padding: 20,
+  },
+  noteTitle: {
+    color: "#332c27",
+    fontSize: 18,
     fontWeight: "800",
     marginBottom: 8,
   },
-  featureText: {
-    color: "#675c52",
+  noteText: {
+    color: "#5d534a",
     fontSize: 15,
     lineHeight: 24,
   },
 });
+

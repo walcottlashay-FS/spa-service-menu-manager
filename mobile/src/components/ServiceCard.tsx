@@ -7,6 +7,7 @@ type ServiceCardProps = {
   onEdit: (service: SpaService) => void;
 };
 
+// Displays one spa service card with Edit and Remove actions.
 export default function ServiceCard({
   service,
   onDelete,
@@ -107,3 +108,4 @@ const styles = StyleSheet.create({
     fontWeight: "800",
   },
 });
+

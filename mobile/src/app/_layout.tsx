@@ -1,9 +1,7 @@
-import { Stack, useRouter } from "expo-router";
-import { Pressable, Text } from "react-native";
+import { Stack } from "expo-router";
 
+// Main navigation layout for the mobile app.
 export default function RootLayout() {
-  const router = useRouter();
-
   return (
     <Stack
       screenOptions={{
@@ -17,14 +15,6 @@ export default function RootLayout() {
         contentStyle: {
           backgroundColor: "#f7f1e8",
         },
-        headerRight: () => (
-          <Pressable
-            onPress={() => console.log("Menu pressed")}
-            style={{ paddingHorizontal: 12 }}
-          >
-            <Text style={{ fontSize: 26, color: "#332c27" }}>☰</Text>
-          </Pressable>
-        ),
       }}
     >
       <Stack.Screen
@@ -42,11 +32,12 @@ export default function RootLayout() {
       />
 
       <Stack.Screen
-  name="add-service"
-  options={{
-    title: "Add Service",
-  }}
-/>
+        name="add-service"
+        options={{
+          title: "Add Service",
+        }}
+      />
     </Stack>
   );
 }
+
