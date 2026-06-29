@@ -6,7 +6,7 @@ import { useRouter } from "expo-router";
 import AppButton from "../components/AppButton";
 import { useAuth } from "../context/AuthContext";
 
-// Mobile dashboard landing screen for the spa service manager.
+// Mobile home screen for the spa service manager.
 export default function HomeScreen() {
   const router = useRouter();
   const { user, logout } = useAuth();
@@ -17,16 +17,17 @@ export default function HomeScreen() {
         <View style={styles.headerCard}>
           <Text style={styles.eyebrow}>Spa Menu Studio</Text>
 
-          <Text style={styles.title}>Manage your spa services with ease.</Text>
+          <Text style={styles.title}>Welcome to your spa menu manager.</Text>
 
           <Text style={styles.description}>
-            Login or create an account to access the protected spa service
-            dashboard.
+            Keep your spa services organized in one place. Login to view your
+            service list, update prices, add new treatments, or remove outdated
+            menu items.
           </Text>
 
           {user ? (
             <View style={styles.userBox}>
-              <Text style={styles.userText}>Logged in as {user.name}</Text>
+              <Text style={styles.userText}>You are logged in as {user.name}</Text>
             </View>
           ) : null}
 
@@ -34,7 +35,7 @@ export default function HomeScreen() {
             {user ? (
               <>
                 <AppButton
-                  title="View Protected Services"
+                  title="Open Service Dashboard"
                   onPress={() => router.push("/services" as never)}
                 />
 
@@ -58,40 +59,43 @@ export default function HomeScreen() {
         </View>
 
         <View style={styles.dashboardSection}>
-          <Text style={styles.sectionTitle}>Protected App Features</Text>
+          <Text style={styles.sectionTitle}>What you can do</Text>
 
           <View style={styles.toolGrid}>
             <View style={styles.toolCard}>
               <Text style={styles.toolNumber}>01</Text>
-              <Text style={styles.toolTitle}>User Login</Text>
+              <Text style={styles.toolTitle}>Sign in securely</Text>
               <Text style={styles.toolText}>
-                Users must register or login before accessing service records.
+                Create an account or login before accessing your spa service
+                dashboard.
               </Text>
             </View>
 
             <View style={styles.toolCard}>
               <Text style={styles.toolNumber}>02</Text>
-              <Text style={styles.toolTitle}>Protected Dashboard</Text>
+              <Text style={styles.toolTitle}>Manage your service menu</Text>
               <Text style={styles.toolText}>
-                Spa services are only available after authentication.
+                View your current services, categories, and pricing from a
+                protected dashboard.
               </Text>
             </View>
 
             <View style={styles.toolCard}>
               <Text style={styles.toolNumber}>03</Text>
-              <Text style={styles.toolTitle}>CRUD Access</Text>
+              <Text style={styles.toolTitle}>Make quick updates</Text>
               <Text style={styles.toolText}>
-                Logged-in users can view, add, edit, and remove spa services.
+                Add new services, edit existing details, or remove services you
+                no longer offer.
               </Text>
             </View>
           </View>
         </View>
 
         <View style={styles.noteCard}>
-          <Text style={styles.noteTitle}>Built with authentication</Text>
+          <Text style={styles.noteTitle}>Private access for your menu</Text>
           <Text style={styles.noteText}>
-            This app now includes a user model, login flow, register flow, token
-            handling, and protected content access.
+            Your service dashboard is protected, so only logged-in users can
+            make changes to the spa menu.
           </Text>
         </View>
       </ScrollView>
@@ -209,3 +213,4 @@ const styles = StyleSheet.create({
     lineHeight: 24,
   },
 });
+
