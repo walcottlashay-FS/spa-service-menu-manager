@@ -1,9 +1,14 @@
 const express = require("express");
 const router = express.Router();
+
 const Service = require("../models/Service");
+const protect = require("../middleware/authMiddleware");
+
+// Service routes below are protected.
+// A user must be logged in and send a valid token before using CRUD.
 
 // GET all services
-router.get("/", async (req, res) => {
+router.get("/", protect, async (req, res) => {
   try {
     const services = await Service.find().sort({ created_at: -1 });
     res.json(services);
@@ -13,7 +18,7 @@ router.get("/", async (req, res) => {
 });
 
 // POST a new service
-router.post("/", async (req, res) => {
+router.post("/", protect, async (req, res) => {
   try {
     const service = new Service({
       serviceName: req.body.serviceName,
@@ -29,7 +34,7 @@ router.post("/", async (req, res) => {
 });
 
 // PATCH update a service
-router.patch("/:id", async (req, res) => {
+router.patch("/:id", protect, async (req, res) => {
   try {
     const updatedService = await Service.findByIdAndUpdate(
       req.params.id,
@@ -48,7 +53,7 @@ router.patch("/:id", async (req, res) => {
 });
 
 // DELETE a service
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", protect, async (req, res) => {
   try {
     const deletedService = await Service.findByIdAndDelete(req.params.id);
 
@@ -63,3 +68,4 @@ router.delete("/:id", async (req, res) => {
 });
 
 module.exports = router;
+

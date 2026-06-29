@@ -5,14 +5,17 @@ const serviceSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+
   category: {
     type: String,
     required: true,
   },
+
   price: {
     type: Number,
     required: true,
   },
+
   created_at: {
     type: Date,
     default: Date.now,
