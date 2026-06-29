@@ -4,10 +4,12 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 
 import AppButton from "../components/AppButton";
+import { useAuth } from "../context/AuthContext";
 
 // Mobile dashboard landing screen for the spa service manager.
 export default function HomeScreen() {
   const router = useRouter();
+  const { user, logout } = useAuth();
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -18,59 +20,78 @@ export default function HomeScreen() {
           <Text style={styles.title}>Manage your spa services with ease.</Text>
 
           <Text style={styles.description}>
-            A simple mobile dashboard for keeping spa services, categories, and
-            pricing organized as your menu changes.
+            Login or create an account to access the protected spa service
+            dashboard.
           </Text>
 
-          <View style={styles.buttonStack}>
-            <AppButton
-              title="View Services"
-              onPress={() => router.push("/services" as never)}
-            />
+          {user ? (
+            <View style={styles.userBox}>
+              <Text style={styles.userText}>Logged in as {user.name}</Text>
+            </View>
+          ) : null}
 
-            <AppButton
-              title="Add New Service"
-              variant="soft"
-              onPress={() => router.push("/add-service" as never)}
-            />
+          <View style={styles.buttonStack}>
+            {user ? (
+              <>
+                <AppButton
+                  title="View Protected Services"
+                  onPress={() => router.push("/services" as never)}
+                />
+
+                <AppButton title="Logout" variant="soft" onPress={logout} />
+              </>
+            ) : (
+              <>
+                <AppButton
+                  title="Login"
+                  onPress={() => router.push("/login" as never)}
+                />
+
+                <AppButton
+                  title="Create Account"
+                  variant="soft"
+                  onPress={() => router.push("/register" as never)}
+                />
+              </>
+            )}
           </View>
         </View>
 
         <View style={styles.dashboardSection}>
-          <Text style={styles.sectionTitle}>Manager Tools</Text>
+          <Text style={styles.sectionTitle}>Protected App Features</Text>
 
           <View style={styles.toolGrid}>
             <View style={styles.toolCard}>
               <Text style={styles.toolNumber}>01</Text>
-              <Text style={styles.toolTitle}>Review Menu</Text>
+              <Text style={styles.toolTitle}>User Login</Text>
               <Text style={styles.toolText}>
-                View current services saved to your spa menu.
+                Users must register or login before accessing service records.
               </Text>
             </View>
 
             <View style={styles.toolCard}>
               <Text style={styles.toolNumber}>02</Text>
-              <Text style={styles.toolTitle}>Update Pricing</Text>
+              <Text style={styles.toolTitle}>Protected Dashboard</Text>
               <Text style={styles.toolText}>
-                Edit prices when treatments or seasonal offers change.
+                Spa services are only available after authentication.
               </Text>
             </View>
 
             <View style={styles.toolCard}>
               <Text style={styles.toolNumber}>03</Text>
-              <Text style={styles.toolTitle}>Organize Services</Text>
+              <Text style={styles.toolTitle}>CRUD Access</Text>
               <Text style={styles.toolText}>
-                Keep facials, massage, peels, and wellness services categorized.
+                Logged-in users can view, add, edit, and remove spa services.
               </Text>
             </View>
           </View>
         </View>
 
         <View style={styles.noteCard}>
-          <Text style={styles.noteTitle}>Built for daily spa operations</Text>
+          <Text style={styles.noteTitle}>Built with authentication</Text>
           <Text style={styles.noteText}>
-            Use this app to keep your service list clean, current, and easy to
-            manage from a mobile-friendly workflow.
+            This app now includes a user model, login flow, register flow, token
+            handling, and protected content access.
           </Text>
         </View>
       </ScrollView>
@@ -118,6 +139,17 @@ const styles = StyleSheet.create({
     color: "#675c52",
     fontSize: 16,
     lineHeight: 25,
+  },
+  userBox: {
+    backgroundColor: "#e8ddcd",
+    borderRadius: 18,
+    padding: 14,
+    marginTop: 18,
+  },
+  userText: {
+    color: "#332c27",
+    fontSize: 15,
+    fontWeight: "800",
   },
   buttonStack: {
     gap: 12,
@@ -177,4 +209,3 @@ const styles = StyleSheet.create({
     lineHeight: 24,
   },
 });
-

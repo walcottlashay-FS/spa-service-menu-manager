@@ -14,9 +14,19 @@ export type NewSpaService = {
   price: number;
 };
 
-// Gets all spa services from the deployed Express API.
-export async function getServices() {
-  const response = await fetch(API_URL);
+// Adds the login token to protected API requests.
+function getAuthHeaders(token: string) {
+  return {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${token}`,
+  };
+}
+
+// Gets all spa services from the protected API.
+export async function getServices(token: string) {
+  const response = await fetch(API_URL, {
+    headers: getAuthHeaders(token),
+  });
 
   if (!response.ok) {
     throw new Error("Unable to get services.");
@@ -25,13 +35,11 @@ export async function getServices() {
   return response.json();
 }
 
-// Sends a new spa service to the API and saves it in the database.
-export async function createService(serviceData: NewSpaService) {
+// Sends a new spa service to the protected API.
+export async function createService(serviceData: NewSpaService, token: string) {
   const response = await fetch(API_URL, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers: getAuthHeaders(token),
     body: JSON.stringify(serviceData),
   });
 
@@ -43,9 +51,10 @@ export async function createService(serviceData: NewSpaService) {
 }
 
 // Removes one spa service from the database using its ID.
-export async function deleteService(id: string) {
+export async function deleteService(id: string, token: string) {
   const response = await fetch(`${API_URL}/${id}`, {
     method: "DELETE",
+    headers: getAuthHeaders(token),
   });
 
   if (!response.ok) {
@@ -56,12 +65,14 @@ export async function deleteService(id: string) {
 }
 
 // Updates an existing spa service using its ID.
-export async function updateService(id: string, serviceData: NewSpaService) {
+export async function updateService(
+  id: string,
+  serviceData: NewSpaService,
+  token: string
+) {
   const response = await fetch(`${API_URL}/${id}`, {
     method: "PATCH",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers: getAuthHeaders(token),
     body: JSON.stringify(serviceData),
   });
 
@@ -71,4 +82,3 @@ export async function updateService(id: string, serviceData: NewSpaService) {
 
   return response.json();
 }
-

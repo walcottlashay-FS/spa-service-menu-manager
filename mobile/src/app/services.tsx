@@ -13,6 +13,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import AppButton from "../components/AppButton";
 import ServiceCard from "../components/ServiceCard";
+import { useAuth } from "../context/AuthContext";
 import {
   deleteService,
   getServices,
@@ -22,6 +23,7 @@ import {
 
 export default function ServicesScreen() {
   const router = useRouter();
+  const { token, user, logout } = useAuth();
 
   const [services, setServices] = useState<SpaService[]>([]);
   const [loading, setLoading] = useState(true);
@@ -32,27 +34,37 @@ export default function ServicesScreen() {
   const [editCategory, setEditCategory] = useState("");
   const [editPrice, setEditPrice] = useState("");
 
-  // Loads the current spa service records when the Services screen opens.
+  // Loads protected spa service records after the user is logged in.
   async function loadServices() {
+    if (!token) {
+      setLoading(false);
+      return;
+    }
+
     try {
       setLoading(true);
 
-      const data = await getServices();
+      const data = await getServices(token);
 
       setServices(data);
       setError("");
     } catch (error) {
       console.error("Error loading services:", error);
-      setError("Services could not be loaded. Please try again.");
+      setError("Services could not be loaded. Please try logging in again.");
     } finally {
       setLoading(false);
     }
   }
 
-  // Deletes a selected service and refreshes the menu list.
+  // Deletes a selected service and refreshes the protected menu list.
   async function handleDeleteService(id: string) {
+    if (!token) {
+      setError("Please log in before removing a service.");
+      return;
+    }
+
     try {
-      await deleteService(id);
+      await deleteService(id, token);
       await loadServices();
     } catch (error) {
       console.error("Error deleting service:", error);
@@ -76,19 +88,28 @@ export default function ServicesScreen() {
     setEditPrice("");
   }
 
-  // Sends updated service details to the API and refreshes the menu.
+  // Sends updated service details to the protected API.
   async function handleUpdateService() {
+    if (!token) {
+      setError("Please log in before updating a service.");
+      return;
+    }
+
     if (!editServiceName || !editCategory || !editPrice) {
       setError("Please complete all edit fields before saving.");
       return;
     }
 
     try {
-      await updateService(editId, {
-        serviceName: editServiceName,
-        category: editCategory,
-        price: Number(editPrice),
-      });
+      await updateService(
+        editId,
+        {
+          serviceName: editServiceName,
+          category: editCategory,
+          price: Number(editPrice),
+        },
+        token
+      );
 
       handleCancelEdit();
       await loadServices();
@@ -100,19 +121,49 @@ export default function ServicesScreen() {
 
   useEffect(() => {
     loadServices();
-  }, []);
+  }, [token]);
+
+  if (!token) {
+    return (
+      <SafeAreaView style={styles.safeArea}>
+        <View style={styles.protectedCard}>
+          <Text style={styles.eyebrow}>Protected View</Text>
+
+          <Text style={styles.title}>Login required.</Text>
+
+          <Text style={styles.description}>
+            Please login or create an account before viewing the spa service
+            dashboard.
+          </Text>
+
+          <View style={styles.buttonStack}>
+            <AppButton
+              title="Login"
+              onPress={() => router.push("/login" as never)}
+            />
+
+            <AppButton
+              title="Create Account"
+              variant="soft"
+              onPress={() => router.push("/register" as never)}
+            />
+          </View>
+        </View>
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView style={styles.page} contentContainerStyle={styles.pageContent}>
         <View style={styles.header}>
-          <Text style={styles.eyebrow}>Current Menu</Text>
+          <Text style={styles.eyebrow}>Protected Menu</Text>
 
           <Text style={styles.title}>Spa Services</Text>
 
           <Text style={styles.description}>
-            View, edit, and remove services currently saved to your spa menu.
-            This screen loads live service records from the connected API.
+            Logged in as {user?.name}. View, edit, and remove services currently
+            saved to your protected spa menu.
           </Text>
 
           <View style={styles.headerActions}>
@@ -121,6 +172,8 @@ export default function ServicesScreen() {
               variant="soft"
               onPress={() => router.push("/add-service" as never)}
             />
+
+            <AppButton title="Logout" variant="soft" onPress={logout} />
           </View>
         </View>
 
@@ -219,6 +272,14 @@ const styles = StyleSheet.create({
     padding: 20,
     paddingBottom: 40,
   },
+  protectedCard: {
+    margin: 20,
+    padding: 24,
+    borderRadius: 28,
+    backgroundColor: "#fffaf2",
+    borderWidth: 1,
+    borderColor: "#ddd3c3",
+  },
   header: {
     marginBottom: 24,
   },
@@ -241,7 +302,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 25,
   },
+  buttonStack: {
+    gap: 12,
+    marginTop: 24,
+  },
   headerActions: {
+    gap: 12,
     marginTop: 16,
   },
   error: {
@@ -332,4 +398,3 @@ const styles = StyleSheet.create({
     fontWeight: "800",
   },
 });
-
